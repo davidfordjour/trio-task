@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql
+  name: flask-deployment
   labels: 
-    app: mysql
+    app: flask
 spec:
   replicas: 10
   selector:
     matchLabels:
-      app: mysql
+      app: flask
   template:
     metadata:
       labels:
-        app: mysql
+        app: flask
     spec:
       containers:
       - name: flask-container
