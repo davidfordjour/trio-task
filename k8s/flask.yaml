@@ -7,7 +7,7 @@ data:
     events {}
     http {
       server {
-        listen 80;
+        listen 5000;
         location / {
           proxy_pass http://mysql-service:3300;
         }
