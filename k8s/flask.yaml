@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: flask-config
+data:
+  nginx.conf: |
+    events {}
+    http {
+      server {
+        listen 80;
+        location / {
+          proxy_pass http://mysql-service:3300;
+        }
+      }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  labels: 
+    app: mysql
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: flask-container
+        image: davidfordj98/myflaskapp:latest
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-service
+spec:
+  type: ClusterIP
+  selector:
+    app: flask
+  ports:
+  - protocol: TCP
+    port: 5000  
+    targetPort: 5000
